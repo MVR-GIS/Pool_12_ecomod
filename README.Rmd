@@ -30,7 +30,7 @@ Funding for development of this analysis has been provided by the following US A
 
 * [Upper Mississippi River Restoration Program (UMRR)](https://www.mvr.usace.army.mil/Missions/Environmental-Stewardship/Upper-Mississippi-River-Restoration/)
 
-<img src="figures/UMRRlogo_rgb_300px.png" width=250 align="left" /> <br/>
+<img src="figures/UMRRlogo_rgb_300px.png" width=250 align="left" /> <br clear="all" />
 
 ***  
 

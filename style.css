@@ -1,0 +1,24 @@
+.toolbox {
+  padding: 0.5em;
+  background: Linen;
+  color: Black;
+  border: 2px solid CadetBlue;
+  border-radius: 10px;
+}
+
+.toolbox p {
+  display: inline;      /* remove newline after p */
+}
+
+/*----------LOGO above TOC---------*/
+
+#TOC::before {
+  content: "";
+  display: block;
+  height: 50px;
+  margin: 5px 5px 5px 5px;
+  background-image: url("figures/UMRRlogo_rgb_300px.png");
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+}

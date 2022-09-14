@@ -1,0 +1,10 @@
+name: "Pool_12_ecomod"
+output_dir: "docs"
+exclude: ["data"]
+navbar:
+  title: "Pool 12 Forestry HREP"
+  type: default
+  right:
+    - text: "Home"
+      href: index.html
+

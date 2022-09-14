@@ -37,6 +37,7 @@ following US Army Corps of Engineers (USACE) programs:
     (UMRR)](https://www.mvr.usace.army.mil/Missions/Environmental-Stewardship/Upper-Mississippi-River-Restoration/)
 
 <img src="figures/UMRRlogo_rgb_300px.png" width=250 align="left" />
+<br/>
 
 ------------------------------------------------------------------------
 

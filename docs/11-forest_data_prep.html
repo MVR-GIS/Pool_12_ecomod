@@ -408,7 +408,7 @@ div.tocify {
 Library</a></p>
 <ul>
 <li>Log in</li>
-<li>Search: “UMRS Floodplain Forest Habitat Model”</li>
+<li>Search: “UMRS Floodplain Forest”</li>
 <li>Download:
 <ul>
 <li>“UMRS Floodplain Forest Model Documentation and Application
@@ -417,11 +417,43 @@ Guide”</li>
 </ul></li>
 </ul>
 </div>
-<div id="import-observations" class="section level1" number="2">
-<h1><span class="header-section-number">2</span> Import
+<div id="forest-surveys" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Forest Surveys</h1>
+<p>The USACE <a
+href="https://github.com/ForestManagementGeodatabase">Forest Management
+Geodatabase</a> project maintains a set of forest stand surveys
+completed on the Upper Mississippi River System (UMRS). These stand
+summaries can be used to create the input for the Floodplain Forest
+model.</p>
+<div id="steps" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Steps</h2>
+<ul>
+<li>Open the <a
+href="https://forestmanagementgeodatabase.github.io/FMG-MVR-Reports/"
+target="_blank">Forest Stand Summaries (opens in another
+window)</a>.</li>
+<li>Arrange your browser windows so that this window and the forest
+stand summaries window are side-by-side.</li>
+<li>Locate the forest stand summaries that cover the project study
+area.</li>
+</ul>
+</div>
+</div>
+<div id="import-observations" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Import
 Observations</h1>
+<p>Import an existing table of Floodplain Forest model predictor
+variables.</p>
 <pre class="r"><code>forest_observations &lt;- read_csv(&quot;input/forest_observations.csv&quot;,
-                                show_col_types = FALSE)</code></pre>
+                                show_col_types = TRUE)</code></pre>
+<pre><code>## Rows: 45 Columns: 12
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (2): unit, alternative
+## dbl (10): area, canopy_per, type_per, invasive_per, stocking_per, horiz_div,...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
 
 

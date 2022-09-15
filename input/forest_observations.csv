@@ -1,5 +1,5 @@
 unit,alternative,area,canopy_per,type_per,invasive_per,stocking_per,horiz_div,vert_div,size_div,dead_tpa,species_div
-p12c001u001,Evaluation 1,0,0.8,0.1,0.1,0.05,2,0,0,0,0
+p12c001u001,Evaluation 1,0,60,20,40,10,0,0,0,0,0
 p12c001u002,Evaluation 1,0,0.4,0.45,0.2,0.1,0,0,0,0,0
 p12c001u004,Evaluation 1,0,0.6,0.3,0.25,0.025,0,0,0,0,0
 p12c001u005,Evaluation 1,0,0.4,0.3,0.034,0.8,0,0,0,0,0

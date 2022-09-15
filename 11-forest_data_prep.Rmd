@@ -9,7 +9,7 @@ output: html_document
 [IWR Planning Assistance Library](https://ecolibrary.planusace.us/)
 
   -  Log in
-  -  Search: "UMRS Floodplain Forest Habitat Model"
+  -  Search: "UMRS Floodplain Forest"
   -  Download: 
       -  "UMRS Floodplain Forest Model Documentation and Application Guide"
       -  "UMRS Floodplain Forest Model Application Spreadsheet"
@@ -21,12 +21,22 @@ library(readr)
 ```
 
 
+
+# Forest Surveys
+The USACE [Forest Management Geodatabase](https://github.com/ForestManagementGeodatabase) project maintains a set of forest stand surveys completed on the Upper Mississippi River System (UMRS). These stand summaries can be used to create the input for the Floodplain Forest model. 
+
+## Steps
+  -  Open the [Forest Stand Summaries (opens in another window)](https://forestmanagementgeodatabase.github.io/FMG-MVR-Reports/){target="_blank"}. 
+  -  Arrange your browser windows so that this window and the forest stand summaries window are side-by-side. 
+  -  Locate the forest stand summaries that cover the project study area. 
+  
+
 # Import Observations
+Import an existing table of Floodplain Forest model predictor variables. 
 ```{r}
 forest_observations <- read_csv("input/forest_observations.csv",
-                                show_col_types = FALSE)
+                                show_col_types = TRUE)
 ```
-
 
 ```{r echo=FALSE, eval=FALSE}
 library(DataEditR)

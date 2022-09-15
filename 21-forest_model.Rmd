@@ -9,7 +9,7 @@ output: html_document
 [IWR Planning Assistance Library](https://ecolibrary.planusace.us/)
 
   -  Log in
-  -  Search: "UMRS Floodplain Forest Habitat Model"
+  -  Search: "UMRS Floodplain Forest"
   -  Download: 
       -  "UMRS Floodplain Forest Model Documentation and Application Guide"
       -  "UMRS Floodplain Forest Model Application Spreadsheet"

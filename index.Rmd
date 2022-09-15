@@ -6,8 +6,37 @@ output: html_document
 
 # Introduction
 
+## Study Area
 
-[Find an HREP](https://www.mvr.usace.army.mil/Missions/Environmental-Stewardship/Upper-Mississippi-River-Restoration/Habitat-Restoration/Find-an-HREP-Project/)
+-  [Find an HREP](https://www.mvr.usace.army.mil/Missions/Environmental-Stewardship/Upper-Mississippi-River-Restoration/Habitat-Restoration/Find-an-HREP-Project/)
+-  [Pool 12 Forestry HREP](https://www.mvr.usace.army.mil/Missions/Environmental-Stewardship/Upper-Mississippi-River-Restoration/Habitat-Restoration/Rock-Island-District/Pool-12-Forestry/)
 
-[Pool 12 Forestry HREP](https://www.mvr.usace.army.mil/Missions/Environmental-Stewardship/Upper-Mississippi-River-Restoration/Habitat-Restoration/Rock-Island-District/Pool-12-Forestry/)
+# Scoping Questions
+This section will pose a series of prompting questions for Project Delivery Team (PDT) members to consider when scoping a feasibility study modeling effort. These questions are designed to meet the following goals:
+
+  - Ensure this modeling effort meets the goals of the project. 
+  - Find the right level of modeling effort that matches project budget and timeline. 
+  - Provide modelers with the details needed to build, run, and use the models for project decision making.
+
+The PDT will provide specific answers to these general questions to help capture their rationale chosen for the ecological modeling portion of this study. This recording of the PDT's answers to these questions serves as a decision log for the modeling effort to help keep it on track. 
+
+## What models will describe the benefits?
+The purpose of this question is to determine the models to apply in this feasibility study. 
+
+## How much do conditions vary across the study area?
+The purpose of this question is to determine how to subdivide the study area for analysis.
+
+
+
+
+
+
+Questions:
+* seasonality
+* period of analysis
+* sources of data
+* how much detail
+* how to compare alternatives (EC, FWOP, alts, etc.)
+* project timeline
+* staffing: disciplines needed
 

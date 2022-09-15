@@ -1,5 +1,5 @@
 ---
-title: "Pool 12 Forestry HREP: Ecological Modeling"
+title: "Create Floodplain Forest Model"
 date: "`r Sys.Date()`"
 output: html_document
 ---
@@ -110,24 +110,14 @@ nybem::HSIplotter(ff_model,
 
 # Import Observations
 ```{r}
-observations <- read_csv("input/forest_observations.csv",
-                          show_col_types = FALSE)
-```
-
-```{r echo=FALSE, eval=FALSE}
-library(DataEditR)
-# https://cran.r-project.org/web/packages/DataEditR/vignettes/DataEditR.html
-
-data_edit(observations, 
-          theme = "sandstone",
-          col_edit = FALSE, row_edit = TRUE,
-          col_names = FALSE, col_readonly = c("unit"),
-          save_as = "input/forest_observations.csv", 
-          read_fun = "read_csv", write_fun = "write_csv",
-          hide = TRUE)
+forest_observations <- read_csv("input/forest_observations.csv",
+                                show_col_types = FALSE)
 ```
 
 # Calculate Metrics
+```{r}
+
+```
 
 
 lineupjs

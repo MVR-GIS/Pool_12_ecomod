@@ -10,9 +10,9 @@
 
 
 
-<meta name="date" content="2022-09-14" />
+<meta name="date" content="2022-09-15" />
 
-<title>Pool 12 Forestry HREP: Ecological Modeling</title>
+<title>Create Floodplain Forest Model</title>
 
 <script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -335,13 +335,55 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Data Prep
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="11-forest_data_prep.html">Floodplain Forest</a>
+    </li>
+    <li>
+      <a href="12-kingfisher_data_prep.html">Belted Kingfisher</a>
+    </li>
+    <li>
+      <a href="13-marsh_wren_data_prep.html">Marsh Wren</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Models
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="Floodplain_Forest.html">Floodplain Forest</a>
+      <a href="21-forest_model.html">Floodplain Forest</a>
+    </li>
+    <li>
+      <a href="22-kingfisher_model.html">Belted Kinfisher</a>
+    </li>
+    <li>
+      <a href="24-marsh_wren_model.html">Marsh Wren</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Alternatives
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="31-existing_condition.html">Existing Condition</a>
+    </li>
+    <li>
+      <a href="32-fwop.html">FWOP</a>
+    </li>
+    <li>
+      <a href="33-alt_1.html">Alt 1</a>
     </li>
   </ul>
 </li>
@@ -354,9 +396,8 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Pool 12 Forestry HREP: Ecological
-Modeling</h1>
-<h4 class="date">2022-09-14</h4>
+<h1 class="title toc-ignore">Create Floodplain Forest Model</h1>
+<h4 class="date">2022-09-15</h4>
 
 </div>
 
@@ -441,13 +482,13 @@ ff_labels &lt;- data.frame(
 <pre class="r"><code>nybem::HSIplotter(ff_model,
                   xlab = ff_labels$label,
                   ylab = ff_labels$variable)</code></pre>
-<p><img src="Floodplain_Forest_files/figure-html/unnamed-chunk-4-1.png" width="576" /></p>
+<p><img src="21-forest_model_files/figure-html/unnamed-chunk-4-1.png" width="576" /></p>
 </div>
 <div id="import-observations" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Import
 Observations</h1>
-<pre class="r"><code>observations &lt;- read_csv(&quot;input/forest_observations.csv&quot;,
-                          show_col_types = FALSE)</code></pre>
+<pre class="r"><code>forest_observations &lt;- read_csv(&quot;input/forest_observations.csv&quot;,
+                                show_col_types = FALSE)</code></pre>
 </div>
 <div id="calculate-metrics" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Calculate Metrics</h1>

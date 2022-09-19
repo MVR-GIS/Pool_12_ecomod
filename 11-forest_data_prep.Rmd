@@ -5,10 +5,11 @@ output: html_document
 ---
 
 # Introduction
+The purpose of this section is to prepare the model inputs for use in running the model in the next step. This page walks the PDT through the creation of the model input tables and helps automate their production as iterative changes are made throughout the study. 
 
-[IWR Planning Assistance Library](https://ecolibrary.planusace.us/)
+# Ecological Model
 
-  -  Log in
+  -  Log in to the [USACE IWR Planning Assistance Library](https://ecolibrary.planusace.us/)
   -  Search: "UMRS Floodplain Forest"
   -  Download: 
       -  "UMRS Floodplain Forest Model Documentation and Application Guide"
@@ -17,36 +18,326 @@ output: html_document
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(nybem)
+library(sf)
+library(dplyr)
+library(stringr)
+library(scales)
 library(readr)
+library(knitr)
+library(kableExtra)
+library(leaflet)
+library(leaflet.minicharts)
 ```
-
-
 
 # Forest Surveys
 The USACE [Forest Management Geodatabase](https://github.com/ForestManagementGeodatabase) project maintains a set of forest stand surveys completed on the Upper Mississippi River System (UMRS). These stand summaries can be used to create the input for the Floodplain Forest model. 
 
-## Steps
+## Import FMG Polygons
+
+  -  Locate the processed FMG polygons for this study area.
+  -  Export that polygon dataset to shapefile format into this project's `input` folder. 
+
+## Observations Table
+
+  -  Import the FMG Site dataset. 
+
+```{r}
+sites <- sf::st_read("input/FMG_Sites_Pool12.shp",
+                     quiet = TRUE)
+```
+
+  -  Create the spatial units of analysis for this model - Collapse FMG Sites into FMG Units. This derived dataset contains the geometry for the spatial units of analysis for this study. 
+
+```{r, echo=FALSE}
+# Create study unit of analysis (FMG unit)
+units <- sites %>%
+  mutate(pcu = paste0(POOL, COMPARTMEN, UNIT)) %>%        # variable to group by
+  group_by(pcu) %>%
+  summarize() %>%
+  mutate(acres = as.numeric(sf::st_area(.) * 0.000247105)) %>%     # m^2 to acre
+  relocate(acres, .after = pcu) %>%
+  arrange(pcu) %>%
+  rename(spatial_unit = pcu)
+
+# Create blank observations dataset
+n_obs <- length(units$spatial_unit)
+empty_forest_observations <- units %>%
+  sf::st_drop_geometry() %>%
+  tibble::add_column(alternative  = rep("", n_obs),
+                     canopy_per   = rep(0, n_obs),
+                     type_per     = rep(0, n_obs),
+                     invasive_per = rep(0, n_obs),
+                     stocking_per = rep(0, n_obs),
+                     horiz_div    = rep(0, n_obs),
+                     vert_div     = rep(0, n_obs),
+                     size_div     = rep(0, n_obs),
+                     dead_tpa     = rep(0, n_obs),
+                     species_div  = rep(0, n_obs))
+```
+
+  -  Create the `input\empty_forest_observations.csv` file for data entry. 
+
+```{r}
+readr::write_csv(empty_forest_observations,
+                 "input/empty_forest_observations.csv")
+```
+
+## FMG Summary Reports
+
   -  Open the [Forest Stand Summaries (opens in another window)](https://forestmanagementgeodatabase.github.io/FMG-MVR-Reports/){target="_blank"}. 
-  -  Arrange your browser windows so that this window and the forest stand summaries window are side-by-side. 
   -  Locate the forest stand summaries that cover the project study area. 
-  
+
+--------------------------------------------------------------------------------
+
+# Edit Observations
+
+  -  Open the `input\empty_forest_observations.csv` file in Excel.
+  -  Edit each record using the data in the FMG Stand Summaries report for the study area. 
+  -  Start with the existing condition. 
+  -  Copy all of the rows and append them to the bottom of the table to construct the next alternative. Edit the `alternative` field to indicate which alternative these rows will represent. 
+  -  Edit the records for this alternative to represent forest conditions under that alternative. 
+  -  Repeat the previous steps for each alternative. 
+  -  Save this edited table to the project input folder: `input\forest_observations.csv`
+
+--------------------------------------------------------------------------------
 
 # Import Observations
-Import an existing table of Floodplain Forest model predictor variables. 
+Import the edited table of Floodplain Forest model predictor variables. 
 ```{r}
-forest_observations <- read_csv("input/forest_observations.csv",
-                                show_col_types = TRUE)
+forest_observations <- readr::read_csv("input/forest_observations.csv",
+                                       show_col_types = FALSE)
 ```
 
-```{r echo=FALSE, eval=FALSE}
-library(DataEditR)
-# https://cran.r-project.org/web/packages/DataEditR/vignettes/DataEditR.html
+--------------------------------------------------------------------------------
 
-data_edit(forest_observations, 
-          theme = "sandstone",
-          col_edit = FALSE, row_edit = TRUE,
-          col_names = FALSE, col_readonly = c("unit"),
-          save_as = "input/forest_observations.csv", 
-          read_fun = "read_csv", write_fun = "write_csv",
-          hide = TRUE)
+# Calculate Structural Diversity
+
+```{r}
+forest_predictors <- forest_observations %>%
+  mutate(structure_div = (horiz_div + vert_div + size_div + 
+                          dead_tpa + species_div) / 5)
 ```
+
+```{r echo=FALSE}
+structure_diversity <- forest_predictors %>%
+  select(spatial_unit, alternative, horiz_div, vert_div, size_div, dead_tpa, 
+         species_div, structure_div) %>%
+  group_by(alternative) %>%
+  arrange(spatial_unit, .by_group = TRUE) %>%
+  ungroup()
+
+col_names <- c("Spatial Unit", "Horiz", "Vert", "Size", "Dead", "Species",
+               "Structure")
+```
+
+
+
+## Structure Diversity by Alternative {.tabset .tabset-fade .tabset-pills}
+
+Review the Structure Diversity metric calculations to ensure they are correct before running the model. 
+
+### Existing Condition
+```{r echo=FALSE, results='asis'}
+sd_table <- structure_diversity %>%
+  filter(alternative == "existing")
+
+kbl(select(sd_table, -c(alternative)),
+      col.names = col_names,
+      digits = 2,
+      caption = "Structure Diversity Metric") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+  pack_rows(index = table(sd_table$alternative),
+            indent = FALSE,
+            label_row_css = "background-color: #dad8d8; color: #000000;")
+```
+
+### FWOP
+```{r echo=FALSE, results='asis'}
+sd_table <- structure_diversity %>%
+  filter(alternative == "fwop")
+
+kbl(select(sd_table, -c(alternative)),
+      col.names = col_names,
+      digits = 2,
+      caption = "Structure Diversity Metric") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+  pack_rows(index = table(sd_table$alternative),
+            indent = FALSE,
+            label_row_css = "background-color: #dad8d8; color: #000000;")
+```
+
+### Alternative 1
+```{r echo=FALSE, results='asis'}
+sd_table <- structure_diversity %>%
+  filter(alternative == "Alt_1")
+
+kbl(select(sd_table, -c(alternative)),
+      col.names = col_names,
+      digits = 2,
+      caption = "Structure Diversity Metric") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+  pack_rows(index = table(sd_table$alternative),
+            indent = FALSE,
+            label_row_css = "background-color: #dad8d8; color: #000000;")
+```
+
+--------------------------------------------------------------------------------
+
+# Review Metrics
+
+Review the Floodplain Forest ecological model metrics for each alternative to ensure they are correct before running the model. 
+
+```{r echo=FALSE}
+units_leaflet <- units %>%
+  sf::st_simplify(preserveTopology = TRUE, dTolerance = 5) %>%
+  sf::st_transform(crs = 4326)
+
+units_latlon <- units_leaflet %>%
+  select(-acres) %>%
+  sf::st_set_agr(., "constant") %>%
+  sf::st_centroid(.) %>%
+  mutate(lon = as.numeric(sf::st_coordinates(.)[,1]),
+         lat = as.numeric(sf::st_coordinates(.)[,2]))
+```
+
+```{r echo=FALSE}
+USGStilesURL <- "https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}"
+
+ESRItilesURL <- "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+
+basemap <- leaflet(units_leaflet, width = "100%", height = "400px") %>%
+  addTiles(ESRItilesURL) %>%
+  addPolygons(stroke = TRUE, fill = TRUE, fillOpacity = 0.0, weight = 1,
+              color = "yellow", fillColor = "white", smoothFactor = 0.2,
+              label = units$spatial_unit)
+
+col_names <- c("Spatial Unit", "Canopy %", "Type %", "Invasive %", 
+               "Stocking %", "Structure")
+```
+
+## Existing Condition
+
+```{r echo=FALSE}
+ec_predictors <- forest_predictors %>%
+  filter(alternative == "existing") 
+
+ec_predictors_scaled <- ec_predictors %>%
+  mutate(across(where(is.numeric), ~rescale(.))) %>%
+  select(spatial_unit, canopy_per, type_per, invasive_per,
+         stocking_per, structure_div) %>%
+  inner_join(sf::st_drop_geometry(units_latlon), 
+             by = "spatial_unit") 
+```  
+
+```{r echo=FALSE}
+ec_predictors_map <- basemap %>%
+  addMinicharts(
+    lng = ec_predictors_scaled$lon,
+    lat = ec_predictors_scaled$lat,
+    type = "pie",
+    chartdata = select(ec_predictors_scaled, canopy_per, type_per, 
+                       invasive_per, stocking_per, structure_div)
+  )
+ec_predictors_map
+```
+
+<details>
+<summary>Table</summary>
+```{r echo=FALSE}
+kbl(select(ec_predictors, spatial_unit, canopy_per, type_per, invasive_per,
+           stocking_per, structure_div),
+    col.names = col_names,
+    digits = c(0, 0, 0, 0, 0, 2),
+    caption = "Floodplain Forest Model Metrics") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+</details>
+
+--------------------------------------------------------------------------------
+
+## FWOP
+
+```{r echo=FALSE}
+fwop_predictors <- forest_predictors %>%
+  filter(alternative == "fwop") 
+
+fwop_predictors_scaled <- fwop_predictors %>%
+  mutate(across(where(is.numeric), ~rescale(.))) %>%
+  select(spatial_unit, canopy_per, type_per, invasive_per,
+         stocking_per, structure_div) %>%
+  inner_join(sf::st_drop_geometry(units_latlon), 
+             by = "spatial_unit") 
+```  
+
+```{r echo=FALSE}
+fwop_predictors_map <- basemap %>%
+  addMinicharts(
+    lng = fwop_predictors_scaled$lon,
+    lat = fwop_predictors_scaled$lat,
+    type = "pie",
+    chartdata = select(fwop_predictors_scaled, canopy_per, type_per, 
+                       invasive_per, stocking_per, structure_div)
+  )
+fwop_predictors_map
+```
+
+<details>
+<summary>Table</summary>
+```{r echo=FALSE}
+kbl(select(fwop_predictors, spatial_unit, canopy_per, type_per, invasive_per,
+           stocking_per, structure_div),
+    col.names = col_names,
+    digits = c(0, 0, 0, 0, 0, 2),
+    caption = "Floodplain Forest Model Metrics") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+</details>
+
+--------------------------------------------------------------------------------
+
+## Alternative 1
+
+```{r echo=FALSE}
+a1_predictors <- forest_predictors %>%
+  filter(alternative == "Alt_1") 
+
+a1_predictors_scaled <- a1_predictors %>%
+  mutate(across(where(is.numeric), ~rescale(.))) %>%
+  select(spatial_unit, canopy_per, type_per, invasive_per,
+         stocking_per, structure_div) %>%
+  inner_join(sf::st_drop_geometry(units_latlon), 
+             by = "spatial_unit") 
+```  
+
+```{r echo=FALSE}
+a1_predictors_map <- basemap %>%
+  addMinicharts(
+    lng = fwop_predictors_scaled$lon,
+    lat = fwop_predictors_scaled$lat,
+    type = "pie",
+    chartdata = select(a1_predictors_scaled, canopy_per, type_per, 
+                       invasive_per, stocking_per, structure_div)
+  )
+a1_predictors_map
+```
+
+<details>
+<summary>Table</summary>
+```{r echo=FALSE}
+kbl(select(a1_predictors, spatial_unit, canopy_per, type_per, invasive_per,
+           stocking_per, structure_div),
+    col.names = col_names,
+    digits = c(0, 0, 0, 0, 0, 2),
+    caption = "Floodplain Forest Model Metrics") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+</details>
+
+--------------------------------------------------------------------------------
+
+
+Other potential visualization tools
+
+- lineupjs
+- manipulateWidget
+- rpivotTable

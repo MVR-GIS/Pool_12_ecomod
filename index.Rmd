@@ -9,9 +9,18 @@ csl: chicago-author-date.csl
 # Introduction
 This document describes the methods used for ecological modeling on this project. 
 
+**Getting Started** 
 
-## Study Area
-Use the link below to explore the project:
+-  Explore the project and study area using the links below.
+-  Read the scoping section to understand the rationale governing this modeling effort. 
+-  Use the top menu "Data Prep" to explore how the model inputs were developed for each model.
+-  Use the top menu "Models" to explore how each model was configured and for results. 
+-  Use the top menu "Alternatives" to explore how model results compare by alternative. 
+
+--------------------------------------------------------------------------------
+
+# Study Area
+Use the links below to explore the project:
 
 -  [Find an HREP](https://www.mvr.usace.army.mil/Missions/Environmental-Stewardship/Upper-Mississippi-River-Restoration/Habitat-Restoration/Find-an-HREP-Project/)
 -  [Pool 12 Forestry HREP](https://www.mvr.usace.army.mil/Missions/Environmental-Stewardship/Upper-Mississippi-River-Restoration/Habitat-Restoration/Rock-Island-District/Pool-12-Forestry/)
@@ -72,12 +81,31 @@ Does seasonality need to be considered? If so, what time periods within a year s
   -  Marsh Wren - 
 
 ## What period of analysis needs to be considered?
+Over what length of time are project benefits being modeled? Do some measures start producing benefits earlier than others? If so, what time periods need to be modeled?
+
+  **Answer:**
+
+  -  Floodplain Forest - 
+  -  Kingfisher - 
+  -  Marsh Wren - 
 
 ## What data sources will be used?
+What existing data exists for model input? Does new data need to be collected?
 
-## What will be the sources of model inputs?
+  **Answer:**
+
+  -  Floodplain Forest - Existing FMG data will be summarized for model input.
+  -  Kingfisher - 
+  -  Marsh Wren - 
 
 ## How much model detail is needed to make decisions? 
+What level of input data resolution is necessary to make decisions in this project? Is more recent input data needed or can existing data answer the questions?
+
+  **Answer:**
+
+  -  Floodplain Forest - Existing FMG forest survey data is current enough for this study.
+  -  Kingfisher - 
+  -  Marsh Wren - 
 
 ## What will be the timeline for analysis?
 When are model results needed to support specific decisions required in the feasibility study.

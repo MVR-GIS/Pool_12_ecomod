@@ -120,7 +120,7 @@ forest_observations <- read_csv("input/forest_observations.csv",
 ```
 
 
-lineupjs
-manipulateWidget
-leaflet.minicharts
-rpivotTable
+- lineupjs
+- manipulateWidget
+- leaflet.minicharts
+- rpivotTable

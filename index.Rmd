@@ -1,15 +1,23 @@
 ---
-title: "Pool 12 Forestry HREP: Ecological Modeling"
+title: "Pool 12 Forestry HREP Ecological Modeling"
 date: "`r Sys.Date()`"
 output: html_document
+bibliography: bibliography.bib
+csl: chicago-author-date.csl
 ---
 
 # Introduction
+This document describes the methods used for ecological modeling on this project. 
+
 
 ## Study Area
+Use the link below to explore the project:
 
 -  [Find an HREP](https://www.mvr.usace.army.mil/Missions/Environmental-Stewardship/Upper-Mississippi-River-Restoration/Habitat-Restoration/Find-an-HREP-Project/)
 -  [Pool 12 Forestry HREP](https://www.mvr.usace.army.mil/Missions/Environmental-Stewardship/Upper-Mississippi-River-Restoration/Habitat-Restoration/Rock-Island-District/Pool-12-Forestry/)
+
+
+--------------------------------------------------------------------------------
 
 # Scoping Questions
 This section will pose a series of prompting questions for Project Delivery Team (PDT) members to consider when scoping a feasibility study modeling effort. These questions are designed to meet the following goals:
@@ -20,23 +28,75 @@ This section will pose a series of prompting questions for Project Delivery Team
 
 The PDT will provide specific answers to these general questions to help capture their rationale chosen for the ecological modeling portion of this study. This recording of the PDT's answers to these questions serves as a decision log for the modeling effort to help keep it on track. 
 
-## What models will describe the benefits?
-The purpose of this question is to determine the models to apply in this feasibility study. 
+
+## What decisions will the models support? 
+The purpose of this question is to establish the purpose and role the models must serve to complete the feasibility study. 
+
+  **Answer:**
+  
+  -  Confirm decisions at the Tentatively Selected Plan (TSP) project phase. 
+  -  Document benefits for the final feasibility report. 
+
+## What models will describe project benefits?
+What existing models capture the benefits of this project? 
+
+  **Answer:**
+
+  -  Forest Floodplain Model [@noauthor_upper_2021]
+  -  Belted Kingfisher [@prose_habitat_1985]
+  -  Marsh Wren [@gutzwiller_habitat_1987]
+
+## How will alternatives be evaluated? 
+How will model results will be used to make project decisions? How will project alternatives be compared? 
+
+  **Answer:**
+
+
 
 ## How much do conditions vary across the study area?
-The purpose of this question is to determine how to subdivide the study area for analysis.
+How should the study area be subdivided for analysis? Can the study area be considered as a whole or subdivided into sections? Does the continuous variation of habitat conditions across the study need to be considered? 
 
+  **Answer:**
 
+  -  Floodplain Forest - Forest Management Geodatabase (FMG) Units will be the spatial unit of analysis for the forestry model.
+  -  Kingfisher - 
+  -  Marsh Wren - 
 
+## What seasonality needs to be considered?
+Does seasonality need to be considered? If so, what time periods within a year should be considered?
 
+  **Answer:**
 
+  -  Floodplain Forest - Seasonality does not need to be considered for forest communities. 
+  -  Kingfisher - 
+  -  Marsh Wren - 
 
-Questions:
-* seasonality
-* period of analysis
-* sources of data
-* how much detail
-* how to compare alternatives (EC, FWOP, alts, etc.)
-* project timeline
-* staffing: disciplines needed
+## What period of analysis needs to be considered?
 
+## What data sources will be used?
+
+## What will be the sources of model inputs?
+
+## How much model detail is needed to make decisions? 
+
+## What will be the timeline for analysis?
+When are model results needed to support specific decisions required in the feasibility study.
+
+  **Answer:**
+
+  -  Floodplain Forest model results will be used to formulate measures.
+  -  Calculate benefits for TSP. 
+  -  Final benefits documentation for report. 
+
+## What disciplines will be needed?
+What staff will be required to support analysis of each model throughout the feasibility study? Are they available? What level of effort will be required of them and at which stage of the project? 
+
+  **Answer:**
+
+  -  Floodplain Forest - Biologist (model formulation), GIS (data prep), Foresters (forestry;)
+  -  Kingfisher - Biologist (model formulation)
+  -  Marsh Wren - Biologist (model formulation)
+
+--------------------------------------------------------------------------------
+
+# References

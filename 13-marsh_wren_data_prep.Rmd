@@ -1,0 +1,30 @@
+---
+title: "Create Marsh Wren Predictors"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# Introduction
+The purpose of this section is to prepare the model inputs for use in running the model in the next step. This page walks the PDT through the creation of the model input tables and helps automate their production as iterative changes are made throughout the study. 
+
+# Ecological Model
+
+  -  Log in to the [USACE IWR Planning Assistance Library](https://ecolibrary.planusace.us/)
+  -  Search: "Marsh Wren"
+  -  Download: 
+      -  "Marsh Wren Habitat Suitability Index Model - Model Documentation"
+      -  "Marsh Wren Habitat Suitability Index Model - Application Spreadsheet"
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(nybem)
+library(sf)
+library(dplyr)
+library(stringr)
+library(scales)
+library(readr)
+library(knitr)
+library(kableExtra)
+library(leaflet)
+library(leaflet.minicharts)
+```

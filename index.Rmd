@@ -2,7 +2,7 @@
 title: "Pool 12 Forestry HREP Ecological Modeling"
 date: "`r Sys.Date()`"
 output: html_document
-bibliography: bibliography.bib
+bibliography: [bibliography.bib, r.bib]
 csl: chicago-author-date.csl
 ---
 
@@ -16,6 +16,13 @@ This document describes the methods used for ecological modeling on this project
 -  Use the top menu "Data Prep" to explore how the model inputs were developed for each model.
 -  Use the top menu "Models" to explore how each model was configured and for results. 
 -  Use the top menu "Alternatives" to explore how model results compare by alternative. 
+
+--------------------------------------------------------------------------------
+
+# Approach
+Most of the ecological modeling done for USACE feasibility studies uses the ubiquitous spreadsheet because so many staffers know how to use this tool. However, spreadsheets are not necessarily the best tool for chaining models together, reproducing the analysis, visualizing results and communicating findings. 
+
+This project applies many geospatial data science best practices to streamline ecological modeling [@gandrud_reproducible_2020; @r_core_team_r_2022; @rstudio_team_rstudio_2022; @wickham_welcome_2019, @pebesma_simple_2018]. 
 
 --------------------------------------------------------------------------------
 

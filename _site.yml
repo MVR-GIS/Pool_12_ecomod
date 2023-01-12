@@ -11,18 +11,10 @@ navbar:
       menu:
         - text: "Floodplain Forest"
           href: 11-forest_data_prep.html
-        - text: "Belted Kingfisher"
-          href: 12-kingfisher_data_prep.html
-        - text: "Marsh Wren"
-          href: 13-marsh_wren_data_prep.html
     - text: "Models"
       menu:
         - text: "Floodplain Forest"
           href: 21-forest_model.html
-        - text: "Belted Kinfisher"
-          href: 22-kingfisher_model.html
-        - text: "Marsh Wren"
-          href: 23-marsh_wren_model.html
     - text: "Alternatives"
       menu:
         - text: "Existing Condition"

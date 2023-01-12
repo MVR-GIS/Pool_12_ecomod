@@ -44,7 +44,7 @@ Funding for development of this analysis has been provided by the following US A
 To clone this repository, use green Code button above. 
 
 ## View the Analysis
-[Pool 12 Forestry HREP Ecolicical Model](https://mvr-gis.github.io/Pool_12_ecomod/)
+[Pool 12 Forestry HREP Ecological Model](https://mvr-gis.github.io/Pool_12_ecomod/)
 
 
 ## Bug Reports

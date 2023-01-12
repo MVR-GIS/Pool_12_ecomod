@@ -42,28 +42,51 @@ The USACE [Forest Management Geodatabase](https://github.com/ForestManagementGeo
   -  Import the FMG Site dataset. 
 
 ```{r}
-sites <- sf::st_read("input/FMG_Sites_Pool12.shp",
-                     quiet = TRUE)
+sites_fc <- sf::st_read("input/FMG_Sites_Pool12.shp",
+                        quiet = TRUE)
 ```
 
   -  Create the spatial units of analysis for this model - Collapse FMG Sites into FMG Units. This derived dataset contains the geometry for the spatial units of analysis for this study. 
 
 ```{r, echo=FALSE}
 # Create study unit of analysis (FMG unit)
-units <- sites %>%
+units <- sites_fc %>%
   mutate(pcu = paste0(POOL, COMPARTMEN, UNIT)) %>%        # variable to group by
   group_by(pcu) %>%
   summarize() %>%
   mutate(acres = as.numeric(sf::st_area(.) * 0.000247105)) %>%     # m^2 to acre
   relocate(acres, .after = pcu) %>%
-  arrange(pcu) %>%
-  rename(spatial_unit = pcu)
+  rename(spatial_id = pcu) %>%
+  arrange(spatial_id)
 
-# Create blank observations dataset
-n_obs <- length(units$spatial_unit)
-empty_forest_observations <- units %>%
+sites <- sites_fc %>%
+  mutate(spatial_id = SiteID) %>%
+  select(spatial_id, acres) %>%
+  arrange(spatial_id)
+```
+
+```{r, echo=FALSE}
+# Create blank observations datasets
+n_obs <- length(units$spatial_id)
+empty_forest_observations_unit <- units %>%
   sf::st_drop_geometry() %>%
   tibble::add_column(alternative  = rep("", n_obs),
+                     rx_acres     = rep(0, n_obs),
+                     canopy_per   = rep(0, n_obs),
+                     type_per     = rep(0, n_obs),
+                     invasive_per = rep(0, n_obs),
+                     stocking_per = rep(0, n_obs),
+                     horiz_div    = rep(0, n_obs),
+                     vert_div     = rep(0, n_obs),
+                     size_div     = rep(0, n_obs),
+                     dead_tpa     = rep(0, n_obs),
+                     species_div  = rep(0, n_obs))
+
+n_obs <- length(sites$spatial_id)
+empty_forest_observations_site <- sites %>%
+  sf::st_drop_geometry() %>%
+  tibble::add_column(alternative  = rep("", n_obs),
+                     rx_acres     = rep(0, n_obs),
                      canopy_per   = rep(0, n_obs),
                      type_per     = rep(0, n_obs),
                      invasive_per = rep(0, n_obs),
@@ -75,11 +98,13 @@ empty_forest_observations <- units %>%
                      species_div  = rep(0, n_obs))
 ```
 
-  -  Create the `input\empty_forest_observations.csv` file for data entry. 
+  -  Create the `input\empty_forest_observations_*.csv` file for data entry. 
 
 ```{r}
-readr::write_csv(empty_forest_observations,
-                 "input/empty_forest_observations.csv")
+readr::write_csv(empty_forest_observations_unit,
+                 "input/empty_forest_observations_unit.csv")
+readr::write_csv(empty_forest_observations_site,
+                 "input/empty_forest_observations_site.csv")
 ```
 
 ## FMG Summary Reports
@@ -91,9 +116,10 @@ readr::write_csv(empty_forest_observations,
 
 # Edit Observations
 
-  -  Open the `input\empty_forest_observations.csv` file in Excel.
+  -  Open the `input\empty_forest_observations_*.csv` file in Excel.
   -  Edit each record using the data in the FMG Stand Summaries report for the study area. 
-  -  Start with the existing condition. 
+  -  Specify the number of treatment acres within each spatial unit of analysis. 
+  -  Enter data for the existing condition using the FMG Stand Walk Summaries. 
   -  Copy all of the rows and append them to the bottom of the table to construct the next alternative. Edit the `alternative` field to indicate which alternative these rows will represent. 
   -  Edit the records for this alternative to represent forest conditions under that alternative. 
   -  Repeat the previous steps for each alternative. 
@@ -120,13 +146,13 @@ forest_predictors <- forest_observations %>%
 
 ```{r echo=FALSE}
 structure_diversity <- forest_predictors %>%
-  select(spatial_unit, alternative, horiz_div, vert_div, size_div, dead_tpa, 
+  select(spatial_id, alternative, horiz_div, vert_div, size_div, dead_tpa, 
          species_div, structure_div) %>%
   group_by(alternative) %>%
-  arrange(spatial_unit, .by_group = TRUE) %>%
+  arrange(spatial_id, .by_group = TRUE) %>%
   ungroup()
 
-col_names <- c("Spatial Unit", "Horiz", "Vert", "Size", "Dead", "Species",
+col_names <- c("Spatial ID", "Horiz", "Vert", "Size", "Dead", "Species",
                "Structure")
 ```
 
@@ -169,7 +195,7 @@ kbl(select(sd_table, -c(alternative)),
 ### Alternative 1
 ```{r echo=FALSE, results='asis'}
 sd_table <- structure_diversity %>%
-  filter(alternative == "Alt_1")
+  filter(alternative == "Alt_1_1")
 
 kbl(select(sd_table, -c(alternative)),
       col.names = col_names,
@@ -209,7 +235,7 @@ basemap <- leaflet(units_leaflet, width = "100%", height = "400px") %>%
   addTiles(ESRItilesURL) %>%
   addPolygons(stroke = TRUE, fill = TRUE, fillOpacity = 0.0, weight = 1,
               color = "yellow", fillColor = "white", smoothFactor = 0.2,
-              label = units$spatial_unit)
+              label = units$spatial_id)
 
 col_names <- c("Spatial Unit", "Canopy %", "Type %", "Invasive %", 
                "Stocking %", "Structure")
@@ -223,10 +249,10 @@ ec_predictors <- forest_predictors %>%
 
 ec_predictors_scaled <- ec_predictors %>%
   mutate(across(where(is.numeric), ~rescale(.))) %>%
-  select(spatial_unit, canopy_per, type_per, invasive_per,
+  select(spatial_id, canopy_per, type_per, invasive_per,
          stocking_per, structure_div) %>%
   inner_join(sf::st_drop_geometry(units_latlon), 
-             by = "spatial_unit") 
+             by = "spatial_id") 
 ```  
 
 ```{r echo=FALSE}
@@ -244,7 +270,7 @@ ec_predictors_map
 <details>
 <summary>Table</summary>
 ```{r echo=FALSE}
-kbl(select(ec_predictors, spatial_unit, canopy_per, type_per, invasive_per,
+kbl(select(ec_predictors, spatial_id, canopy_per, type_per, invasive_per,
            stocking_per, structure_div),
     col.names = col_names,
     digits = c(0, 0, 0, 0, 0, 2),
@@ -263,10 +289,10 @@ fwop_predictors <- forest_predictors %>%
 
 fwop_predictors_scaled <- fwop_predictors %>%
   mutate(across(where(is.numeric), ~rescale(.))) %>%
-  select(spatial_unit, canopy_per, type_per, invasive_per,
+  select(spatial_id, canopy_per, type_per, invasive_per,
          stocking_per, structure_div) %>%
   inner_join(sf::st_drop_geometry(units_latlon), 
-             by = "spatial_unit") 
+             by = "spatial_id") 
 ```  
 
 ```{r echo=FALSE}
@@ -284,7 +310,7 @@ fwop_predictors_map
 <details>
 <summary>Table</summary>
 ```{r echo=FALSE}
-kbl(select(fwop_predictors, spatial_unit, canopy_per, type_per, invasive_per,
+kbl(select(fwop_predictors, spatial_id, canopy_per, type_per, invasive_per,
            stocking_per, structure_div),
     col.names = col_names,
     digits = c(0, 0, 0, 0, 0, 2),
@@ -295,18 +321,18 @@ kbl(select(fwop_predictors, spatial_unit, canopy_per, type_per, invasive_per,
 
 --------------------------------------------------------------------------------
 
-## Alternative 1
+## Alternative 1, TY 1
 
 ```{r echo=FALSE}
 a1_predictors <- forest_predictors %>%
-  filter(alternative == "Alt_1") 
+  filter(alternative == "Alt_1_1") 
 
 a1_predictors_scaled <- a1_predictors %>%
   mutate(across(where(is.numeric), ~rescale(.))) %>%
-  select(spatial_unit, canopy_per, type_per, invasive_per,
+  select(spatial_id, canopy_per, type_per, invasive_per,
          stocking_per, structure_div) %>%
   inner_join(sf::st_drop_geometry(units_latlon), 
-             by = "spatial_unit") 
+             by = "spatial_id") 
 ```  
 
 ```{r echo=FALSE}
@@ -324,7 +350,7 @@ a1_predictors_map
 <details>
 <summary>Table</summary>
 ```{r echo=FALSE}
-kbl(select(a1_predictors, spatial_unit, canopy_per, type_per, invasive_per,
+kbl(select(a1_predictors, spatial_id, canopy_per, type_per, invasive_per,
            stocking_per, structure_div),
     col.names = col_names,
     digits = c(0, 0, 0, 0, 0, 2),

@@ -15,7 +15,7 @@ feasibility study.
 [![Project Status: Active The project has reached a stable, usable state
 and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2022--09--14-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2023--01--12-yellowgreen.svg)](/commits/master)
 [![Licence](https://img.shields.io/badge/licence-CC0-blue.svg)](http://choosealicense.com/licenses/cc0-1.0/)
 
 ## Description
@@ -58,7 +58,7 @@ To clone this repository, use green Code button above.
 
 ## View the Analysis
 
-[Pool 12 Forestry HREP Ecolicical
+[Pool 12 Forestry HREP Ecological
 Model](https://mvr-gis.github.io/Pool_12_ecomod/)
 
 ## Bug Reports
